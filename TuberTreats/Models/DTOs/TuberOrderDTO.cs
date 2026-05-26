@@ -1,4 +1,4 @@
-namespace TuberTreats.Models;
+namespace TuberTreats.Models.DTOs;
 
 public class TuberOrderDTO
 {
