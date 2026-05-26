@@ -115,6 +115,78 @@ app.MapGet("/toppings/{id}", (int id) =>
     });
 });
 
+app.MapGet("/customers", () =>
+{
+    return customers.Select(c => new CustomerDTO
+    {
+        Id = c.Id,
+        Name = c.Name,
+        Address = c.Address
+    });
+});
+
+app.MapGet("/customers/{id}", (int id) =>
+{
+    Customer customer = customers.FirstOrDefault(c => c.Id == id);
+
+    if (customer == null)
+    {
+        return Results.NotFound();
+    }
+
+    List<TuberOrder> orders = tuberOrders.Where(to => to.CustomerId == id).ToList();
+
+    return Results.Ok(new CustomerDTO
+    {
+        Id = customer.Id,
+        Name = customer.Name,
+        Address = customer.Address,
+        TuberOrders = orders.Select(o => new TuberOrderDTO
+        {
+            Id = o.Id,
+            OrderPlacedOnDate = o.OrderPlacedOnDate,
+            CustomerId = o.CustomerId,
+            TuberDriverId = o.TuberDriverId,
+            DeliveredOnDate = o.DeliveredOnDate
+        }).ToList()
+    });
+});
+
+app.MapPost("/customers", (Customer customer) =>
+{
+    if (customers.Count == 0)
+    {
+        customer.Id = 1;
+    }
+    else
+    {
+        customer.Id = customers.Max(c => c.Id) + 1;
+    }
+
+    customers.Add(customer);
+
+    return Results.Created($"/customers/{customer.Id}", new CustomerDTO
+    {
+        Id = customer.Id,
+        Name = customer.Name,
+        Address = customer.Address
+    });
+});
+
+app.MapDelete("/customers/{id}", (int id) =>
+{
+    Customer customer = customers.FirstOrDefault(c => c.Id == id);
+
+    if (customer == null)
+    {
+        return Results.NotFound();
+    }
+
+    customers.Remove(customer);
+
+    return Results.NoContent();
+});
+
 app.Run();
 //don't touch or move this!
 public partial class Program { }
