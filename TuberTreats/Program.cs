@@ -1,3 +1,72 @@
+using TuberTreats.Models;
+using TuberTreats.Models.DTOs;
+
+List<Customer> customers = new List<Customer>
+{
+    new Customer() { Id = 1, Name = "Homer Simpson", Address = "742 Evergreen Terrace" },
+    new Customer() { Id = 2, Name = "Marge Simpson", Address = "742 Evergreen Terrace" },
+    new Customer() { Id = 3, Name = "Ned Flanders", Address = "744 Evergreen Terrace" },
+    new Customer() { Id = 4, Name = "Moe Szyslak", Address = "57 Walnut Street" },
+    new Customer() { Id = 5, Name = "Bart Simpson", Address = "742 Evergreen Terrace" }
+};
+
+List<Topping> toppings = new List<Topping>
+{
+    new Topping() { Id = 1, Name = "Butter" },
+    new Topping() { Id = 2, Name = "Sour Cream" },
+    new Topping() { Id = 3, Name = "Cheddar Cheese" },
+    new Topping() { Id = 4, Name = "Bacon Bits" },
+    new Topping() { Id = 5, Name = "Chives" }
+};
+
+List<TuberDriver> tuberDrivers = new List<TuberDriver>
+{
+    new TuberDriver() { Id = 1, Name = "Apu Nahasapeemapetilon", TuberDeliveries = new List<TuberOrder>() },
+    new TuberDriver() { Id = 2, Name = "Krusty the Clown", TuberDeliveries = new List<TuberOrder>() },
+    new TuberDriver() { Id = 3, Name = "Barney Gumble", TuberDeliveries = new List<TuberOrder>() }
+};
+
+List<TuberTopping> tuberToppings = new List<TuberTopping>
+{
+    new TuberTopping() { Id = 1, TuberOrderId = 1, ToppingId = 1 },
+    new TuberTopping() { Id = 2, TuberOrderId = 1, ToppingId = 3 },
+    new TuberTopping() { Id = 3, TuberOrderId = 2, ToppingId = 2 },
+    new TuberTopping() { Id = 4, TuberOrderId = 2, ToppingId = 4 },
+    new TuberTopping() { Id = 5, TuberOrderId = 3, ToppingId = 1 },
+    new TuberTopping() { Id = 6, TuberOrderId = 3, ToppingId = 5 }
+};
+
+List<TuberOrder> tuberOrders = new List<TuberOrder>
+{
+    new TuberOrder()
+    {
+        Id = 1,
+        OrderPlacedOnDate = new DateTime(2024, 1, 15),
+        CustomerId = 1,
+        TuberDriverId = 1,
+        DeliveredOnDate = new DateTime(2024, 1, 15),
+        Toppings = new List<Topping>()
+    },
+    new TuberOrder()
+    {
+        Id = 2,
+        OrderPlacedOnDate = new DateTime(2024, 2, 20),
+        CustomerId = 3,
+        TuberDriverId = 2,
+        DeliveredOnDate = new DateTime(2024, 2, 20),
+        Toppings = new List<Topping>()
+    },
+    new TuberOrder()
+    {
+        Id = 3,
+        OrderPlacedOnDate = new DateTime(2024, 3, 10),
+        CustomerId = 5,
+        TuberDriverId = null,
+        DeliveredOnDate = null,
+        Toppings = new List<Topping>()
+    }
+};
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
