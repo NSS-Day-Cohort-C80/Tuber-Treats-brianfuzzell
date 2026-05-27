@@ -317,6 +317,20 @@ app.MapPost("/tuberorders", (TuberOrder tuberOrder) =>
     });
 });
 
+app.MapPut("/tuberorders/{id}", (int id, TuberOrder tuberOrder) =>
+{
+    TuberOrder orderToUpdate = tuberOrders.FirstOrDefault(to => to.Id == id);
+
+    if (orderToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+
+    orderToUpdate.TuberDriverId = tuberOrder.TuberDriverId;
+
+    return Results.NoContent();
+});
+
 app.Run();
 //don't touch or move this!
 public partial class Program { }
