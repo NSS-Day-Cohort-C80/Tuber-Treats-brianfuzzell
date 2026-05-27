@@ -277,6 +277,46 @@ app.MapGet("/tuberorders/{id}", (int id) =>
     });
 });
 
+app.MapPost("/tuberorders", (TuberOrder tuberOrder) =>
+{
+    if (tuberOrders.Count == 0)
+    {
+        tuberOrder.Id = 1;
+    }
+    else
+    {
+       tuberOrder.Id = tuberOrders.Max(to => to.Id) + 1; 
+    }
+    
+    tuberOrder.OrderPlacedOnDate = DateTime.Now;
+
+    foreach (Topping topping in tuberOrder.Toppings)
+    {
+        tuberToppings.Add(new TuberTopping
+        {
+            Id = tuberToppings.Max(tt => tt.Id) + 1,
+            TuberOrderId = tuberOrder.Id,
+            ToppingId = topping.Id
+        });
+    }
+
+    tuberOrders.Add(tuberOrder);
+
+    return Results.Created($"/tuberorders/{tuberOrder.Id}", new TuberOrderDTO
+    {
+        Id = tuberOrder.Id,
+        OrderPlacedOnDate = tuberOrder.OrderPlacedOnDate,
+        CustomerId = tuberOrder.CustomerId,
+        TuberDriverId = tuberOrder.TuberDriverId,
+        DeliveredOnDate = tuberOrder.DeliveredOnDate,
+        Toppings = tuberToppings
+            .Where(tt => tt.TuberOrderId == tuberOrder.Id)
+            .Select(tt => toppings.First(t => t.Id == tt.ToppingId))
+            .Select(t => new ToppingDTO { Id = t.Id, Name = t.Name })
+            .ToList()
+    });
+});
+
 app.Run();
 //don't touch or move this!
 public partial class Program { }
