@@ -331,6 +331,13 @@ app.MapPut("/tuberorders/{id}", (int id, TuberOrder tuberOrder) =>
     return Results.NoContent();
 });
 
+app.MapPost("/tuberorders/{id}/complete", (int id) =>
+{
+    TuberOrder orderToComplete = tuberOrders.FirstOrDefault(to => to.Id == id);
+
+    orderToComplete.DeliveredOnDate = DateTime.Today;
+});
+
 app.Run();
 //don't touch or move this!
 public partial class Program { }
