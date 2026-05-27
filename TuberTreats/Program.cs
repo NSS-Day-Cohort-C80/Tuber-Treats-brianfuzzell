@@ -187,6 +187,41 @@ app.MapDelete("/customers/{id}", (int id) =>
     return Results.NoContent();
 });
 
+app.MapGet("/tuberdrivers", () =>
+{
+    return tuberDrivers.Select(td => new TuberDriverDTO
+    {
+        Id = td.Id,
+        Name = td.Name
+    });
+});
+
+app.MapGet("/tuberdrivers/{id}", (int id) =>
+{
+    TuberDriver tuberDriver = tuberDrivers.FirstOrDefault(td => td.Id == id);
+
+    if (tuberDriver == null)
+    {
+        return Results.NotFound();
+    }
+
+    List<TuberOrder> orders = tuberOrders.Where(to => to.TuberDriverId == id).ToList();
+
+    return Results.Ok(new TuberDriverDTO
+    {
+        Id = tuberDriver.Id,
+        Name = tuberDriver.Name,
+        TuberDeliveries = orders.Select(o => new TuberOrderDTO
+        {
+            Id = o.Id,
+            OrderPlacedOnDate = o.OrderPlacedOnDate,
+            CustomerId = o.CustomerId,
+            TuberDriverId = o.TuberDriverId,
+            DeliveredOnDate = o.DeliveredOnDate
+        }).ToList()
+    });
+});
+
 app.Run();
 //don't touch or move this!
 public partial class Program { }
