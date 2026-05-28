@@ -1,4 +1,4 @@
-/* namespace TuberTreats.Tests;
+namespace TuberTreats.Tests;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using System.Net.Http.Json;
@@ -232,4 +232,4 @@ class OrderComparer : IEqualityComparer<TuberOrder>
     {
         return base.GetHashCode();
     }
-} */
+}
