@@ -335,14 +335,19 @@ app.MapPost("/tuberorders", (TuberOrder tuberOrder) =>
 
     tuberOrder.OrderPlacedOnDate = DateTime.Now;
 
-    foreach (Topping topping in tuberOrder.Toppings)
+    if (tuberOrder.Toppings != null)
     {
-        tuberToppings.Add(new TuberTopping
+        foreach (Topping topping in tuberOrder.Toppings)
         {
-            Id = tuberToppings.Max(tt => tt.Id) + 1,
-            TuberOrderId = tuberOrder.Id,
-            ToppingId = topping.Id
-        });
+
+            tuberToppings.Add(new TuberTopping
+            {
+                Id = tuberToppings.Max(tt => tt.Id) + 1,
+                TuberOrderId = tuberOrder.Id,
+                ToppingId = topping.Id
+            });
+
+        }
     }
 
     tuberOrders.Add(tuberOrder);
@@ -380,7 +385,7 @@ app.MapPost("/tuberorders/{id}/complete", (int id) =>
 {
     TuberOrder orderToComplete = tuberOrders.FirstOrDefault(to => to.Id == id);
 
-    orderToComplete.DeliveredOnDate = DateTime.Today;
+    orderToComplete.DeliveredOnDate = DateTime.Now;
 });
 
 app.Run();

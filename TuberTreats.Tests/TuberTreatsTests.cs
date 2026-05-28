@@ -1,4 +1,4 @@
-/* namespace TuberTreats.Tests;
+namespace TuberTreats.Tests;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using System.Net.Http.Json;
@@ -55,7 +55,7 @@ public class TuberTreatsTests
             CustomerId = customerId
         });
         //new order gets a new id
-        Assert.True(newOrder.Id != null && newOrder.Id > 0);
+        Assert.True(newOrder.Id > 0);
         // new order has the correct customer id
         Assert.Equal(customerId, newOrder.CustomerId);
         //new order has a OrderPlacedOnDate that is recent
@@ -159,7 +159,7 @@ public class TuberTreatsTests
             Address = "101 Main Street"
         });
         //new customer gets a new id
-        Assert.True(newCustomer.Id != null && newCustomer.Id > 0);
+        Assert.True(newCustomer.Id > 0);
 
         //collection of customers is updated with new order
         var updatedCustomers = await Get<List<Customer>>(client, "/customers");
@@ -232,4 +232,4 @@ class OrderComparer : IEqualityComparer<TuberOrder>
     {
         return base.GetHashCode();
     }
-} */
+}
