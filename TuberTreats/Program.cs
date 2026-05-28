@@ -222,6 +222,51 @@ app.MapGet("/tuberdrivers/{id}", (int id) =>
     });
 });
 
+app.MapGet("/tubertoppings", () =>
+{
+    return tuberToppings.Select(tt => new TuberToppingDTO
+    {
+        Id = tt.Id,
+        TuberOrderId = tt.TuberOrderId,
+        ToppingId = tt.ToppingId
+    });
+});
+
+app.MapPost("/tubertoppings", (TuberTopping tuberTopping) =>
+{
+    if (tuberToppings.Count == 0)
+    {
+        tuberTopping.Id = 1;
+    }
+    else
+    {
+        tuberTopping.Id = tuberToppings.Max(tt => tt.Id) + 1;
+    }
+
+    tuberToppings.Add(tuberTopping);
+
+    return Results.Created($"/tubertoppings/{tuberTopping.Id}", new TuberToppingDTO
+    {
+        Id = tuberTopping.Id,
+        TuberOrderId = tuberTopping.TuberOrderId,
+        ToppingId = tuberTopping.ToppingId
+    });
+});
+
+app.MapDelete("/tubertoppings/{id}", (int id) =>
+{
+    TuberTopping tuberTopping = tuberToppings.FirstOrDefault(tt => tt.Id == id);
+
+    if (tuberTopping == null)
+    {
+        return Results.NotFound();
+    }
+
+    tuberToppings.Remove(tuberTopping);
+
+    return Results.NoContent();
+});
+
 app.MapGet("/tuberorders", () =>
 {
     return tuberOrders.Select(to => new TuberOrderDTO
@@ -285,9 +330,9 @@ app.MapPost("/tuberorders", (TuberOrder tuberOrder) =>
     }
     else
     {
-       tuberOrder.Id = tuberOrders.Max(to => to.Id) + 1; 
+        tuberOrder.Id = tuberOrders.Max(to => to.Id) + 1;
     }
-    
+
     tuberOrder.OrderPlacedOnDate = DateTime.Now;
 
     foreach (Topping topping in tuberOrder.Toppings)
